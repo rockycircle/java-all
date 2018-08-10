@@ -1,0 +1,273 @@
+package com.example.intelligent;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+
+import zhaochen.memorandum.MainActivity;
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.ContentUris;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
+
+
+public class ThirdRoom extends Activity{
+private Button astartConnect;
+private TextView textViewa;
+private TextView textViewawe;
+private Button mTakePhoto;
+private Button mChoosePhoto;
+private Button mMusic;
+private Button mBeiwang;
+//private Button sosTv3;
+
+
+
+private Button mButton01;   
+private SoundPool sp;//声明一个SoundPool   
+private int music;//定义一个整型用load（）；来设置suondID  
+
+
+private Uri imageUri;
+public static final int TAKE_PHOTO = 1;
+public static final int CHOOSE_PHOTO = 2;
+
+
+Intent openAlbumIntent = new Intent(
+Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+private static final int PHOTOZOOM = 2;
+
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO 自动生成的方法存根
+		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.thother);
+			
+		astartConnect = (Button)findViewById(R.id.StartConnect);	
+		textViewa = (TextView)findViewById(R.id.damp);
+		textViewawe = (TextView)findViewById(R.id.dampwe);
+		mTakePhoto= (Button)findViewById(R.id.button1);
+		mMusic= (Button)findViewById(R.id.button2);
+		mBeiwang= (Button)findViewById(R.id.button4);
+		mChoosePhoto= (Button)findViewById(R.id.button3);
+		mButton01= (Button)findViewById(R.id.button5);
+		
+		
+		astartConnect.setOnClickListener(
+				new View.OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						connect();
+						
+					}
+				});
+
+		mMusic.setOnClickListener(
+				new View.OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						
+						
+						Intent a = new Intent(ThirdRoom.this,Forth.class);
+						startActivity(a);
+				
+						
+						
+					}
+				});
+
+		mBeiwang.setOnClickListener(
+				new View.OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						
+						
+						Intent a = new Intent(ThirdRoom.this,MainActivity.class);
+						startActivity(a);
+				
+						
+						
+					}
+				});
+		
+		 mTakePhoto.setOnClickListener(new View.OnClickListener() {
+	            @Override
+	            public void onClick(View v) {
+	                //创建file对象，用于存储拍照后的图片；
+	            	/*
+	                File outputImage = new File(getExternalCacheDir(), "output_image.jpg");
+
+	                try {
+	                    if (outputImage.exists()) {
+	                        outputImage.delete();
+	                    }
+	                    outputImage.createNewFile();
+
+	                } catch (Exception e) {
+	                    e.printStackTrace();
+	                }
+
+	                if (Build.VERSION.SDK_INT >= 24) {
+	                   imageUri = FileProvider.getUriForFile(ThirdRoom.this,
+	                           "com.gyq.cameraalbumtest.fileprovider", outputImage);
+	                } else {
+	                    imageUri = Uri.fromFile(outputImage);
+	                }
+                    */
+	                //启动相机程序
+	                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+	                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+	                startActivityForResult(intent, TAKE_PHOTO);
+	            }
+	        });
+		 
+	
+		 mChoosePhoto.setOnClickListener(new View.OnClickListener() {
+	            @Override
+	            public void onClick(View v) {
+
+	            	Intent openAlbumIntent = new Intent(
+	            			Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+	            			openAlbumIntent.setType("image/*");
+
+	            			openAlbumIntent.putExtra("crop", true);
+	            			openAlbumIntent.putExtra("return-data", true);
+
+	            			startActivityForResult(openAlbumIntent, PHOTOZOOM);
+	            	
+	            	
+	            }
+	        });
+		 
+		
+	
+		 sp= new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);//第一个参数为同时播放数据流的最大个数，第二数据流类型，第三为声音质量   
+	        music = sp.load(this, R.raw.jingbao, 1); //把你的声音素材放到res/raw里，第2个参数即为资源文件，第3个为音乐的优先级   
+		 
+	       mButton01.setOnClickListener(new View.OnClickListener() {
+	            @Override
+	            public void onClick(View v) {
+	           
+	            	sp.play(music, 1, 1, 0, 0, 0);
+
+
+	            }
+	       });
+	
+
+	}
+	
+//.................................................................
+Socket socket = null;
+BufferedWriter writer= null;
+BufferedReader reader= null;
+
+public void connect(){
+	AsyncTask<Void,String,Void> read = new AsyncTask<Void,String,Void>(){
+
+		@Override
+		protected Void doInBackground(Void... params) {
+		
+			try {
+		//		socket = new Socket("10.0.2.2", 12345);
+	//			socket = new Socket("192.168.1.101", 12345);
+	//			socket = new Socket("47.95.221.102", 12345);		
+   			socket = new Socket("120.79.144.185", 12345); 
+				
+				
+				writer = new BufferedWriter(
+						new OutputStreamWriter(
+								socket.getOutputStream()));
+				reader = new BufferedReader(
+						new InputStreamReader(
+								socket.getInputStream()));
+				publishProgress("@success");
+				
+			} catch (UnknownHostException e) {
+			Toast.makeText(ThirdRoom.this, "无法连接", Toast.LENGTH_SHORT).show();	
+		
+			
+			} catch (IOException e) {
+			Toast.makeText(ThirdRoom.this, "无法连接", Toast.LENGTH_SHORT).show();
+			}
+			
+			
+			try {
+				String line;
+				while((line=reader.readLine())!=null){
+					publishProgress(line);
+					
+				}
+			} catch (IOException e) {
+				// TODO 自动生成的 catch 块
+				e.printStackTrace();
+			}
+			
+			return null;
+		}
+
+		@Override
+		protected void onProgressUpdate(String... values) {
+			if (values[0].equals("@success")) {
+              
+				Toast.makeText(ThirdRoom.this, "连接成功",
+						Toast.LENGTH_SHORT).show();
+			}
+			if (values[0].indexOf(".")!=-1) {
+	              
+				textViewawe.setText( values[0]);
+				}else{textViewa.setText( values[0]);
+				}
+		
+			
+			super.onProgressUpdate(values);
+		}
+		
+		
+		
+		
+		
+	};
+	read.execute();
+}
+
+}
+

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <drawable name="btn_focused">#0066ff</drawable>
+    <drawable name="btn_normal">#009fcc</drawable>     
+     <drawable name="button1_focused">#009fcc</drawable>  
+     <drawable name="button1_normal">#009fcc</drawable>  
+     
+     
+
+    
+</resources>

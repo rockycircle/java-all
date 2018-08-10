@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/tianqi"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="中国-武汉" 
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        />
+<TextView
+        android:id="@+id/qingTiana"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/txt_content"
+        android:layout_alignTop="@+id/txt_content"    
+        android:background="@drawable/qingtian"
+        
+        />
+    <TextView
+        android:id="@+id/txt_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView1"
+        android:text="20°"
+        android:textColor="@color/text_yellow"
+        android:textSize="100sp"/>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/txt_content"
+        android:layout_toRightOf="@+id/textView1"
+        android:text="[切换]"
+        android:textColor="#ffffff"
+        android:textSize="10sp" />
+    
+        <TextView
+        android:id="@+id/shiWen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_content"
+        android:layout_marginTop="30px"
+        android:text="室温："
+        android:textColor="#ffffff"
+        android:textSize="20sp" />
+        
+       <TextView
+        android:id="@+id/shiWenDs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/shiWen"
+        android:layout_alignTop="@id/shiWen"
+        android:text="25°"
+        android:textColor="#ffffff"
+        android:textSize="20sp" />
+        
+        
+                <TextView
+        android:id="@+id/shiDu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/shiWen"
+        android:text="湿度："
+        android:textColor="#ffffff"
+        android:textSize="20sp" />
+
+                          <TextView
+        android:id="@+id/shiDuDs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/shiDu"
+        android:layout_alignTop="@id/shiDu"
+        android:text="50%"
+        android:textColor="#ffffff"
+        android:textSize="20sp" />      
+</RelativeLayout>

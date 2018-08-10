@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring accessors="true" comment="Delete element from 项目“智能家居”&#x0D;&#x0A;－ 原始项目：“智能家居”&#x0D;&#x0A;－ 原始元素：“智能家居.apk”" description="删除元素" element1="bin/智能家居.apk" elements="0" flags="589830" id="org.eclipse.jdt.ui.delete" resources="1" stamp="1523884325867" subPackages="false" version="1.0"/>&#x0A;<refactoring accessors="true" comment="Delete element from 项目“智能家居”&#x0D;&#x0A;－ 原始项目：“智能家居”&#x0D;&#x0A;－ 原始元素：“智能家居.apk”" description="删除元素" element1="bin/智能家居.apk" elements="0" flags="589830" id="org.eclipse.jdt.ui.delete" resources="1" stamp="1523884493466" subPackages="false" version="1.0"/>
+</session>

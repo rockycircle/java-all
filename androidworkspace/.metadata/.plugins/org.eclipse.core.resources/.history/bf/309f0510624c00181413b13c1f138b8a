@@ -1,0 +1,131 @@
+package com.example.intelligent;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+
+
+
+
+
+
+import android.app.Activity;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.View;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class ThirdRoom extends Activity{
+private Button astartConnect;
+private TextView textViewa;
+private TextView textViewawe;
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO 自动生成的方法存根
+		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.thother);
+			
+		astartConnect = (Button)findViewById(R.id.StartConnect);	
+		textViewa = (TextView)findViewById(R.id.damp);
+		textViewawe = (TextView)findViewById(R.id.dampwe);
+		
+		astartConnect.setOnClickListener(
+				new View.OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						connect();
+						
+					}
+				});
+
+	
+	
+
+}
+//.................................................................
+Socket socket = null;
+BufferedWriter writer= null;
+BufferedReader reader= null;
+
+public void connect(){
+	AsyncTask<Void,String,Void> read = new AsyncTask<Void,String,Void>(){
+
+		@Override
+		protected Void doInBackground(Void... params) {
+		
+			try {
+		//		socket = new Socket("10.0.2.2", 12345);
+	//			socket = new Socket("192.168.1.101", 12345);
+	//			socket = new Socket("47.95.221.102", 12345);		
+   			socket = new Socket("10.0.2.2", 12345); 
+				
+				
+				writer = new BufferedWriter(
+						new OutputStreamWriter(
+								socket.getOutputStream()));
+				reader = new BufferedReader(
+						new InputStreamReader(
+								socket.getInputStream()));
+				publishProgress("@success");
+				
+			} catch (UnknownHostException e) {
+			Toast.makeText(ThirdRoom.this, "无法连接", Toast.LENGTH_SHORT).show();	
+		
+			
+			} catch (IOException e) {
+			Toast.makeText(ThirdRoom.this, "无法连接", Toast.LENGTH_SHORT).show();
+			}
+			
+			
+			try {
+				String line;
+				while((line=reader.readLine())!=null){
+					publishProgress(line);
+					
+				}
+			} catch (IOException e) {
+				// TODO 自动生成的 catch 块
+				e.printStackTrace();
+			}
+			
+			return null;
+		}
+
+		@Override
+		protected void onProgressUpdate(String... values) {
+			if (values[0].equals("@success")) {
+              
+				Toast.makeText(ThirdRoom.this, "连接成功",
+						Toast.LENGTH_SHORT).show();
+			}
+			if (values[0].indexOf(".")!=-1) {
+	              
+				textViewawe.setText( values[0]);
+				}else{textViewa.setText( values[0]);
+				}
+		
+			
+			super.onProgressUpdate(values);
+		}
+		
+		
+		
+		
+		
+	};
+	read.execute();
+}
+
+}
+

@@ -1,0 +1,56 @@
+package lanq.lixian.com;
+
+public class SevenCount {
+public static void main(String[] args){
+int[] sc={1,2,3,4,5,6,7};
+int[] sd=new int[14];
+ sd[0]=7;
+ sd[1]=4;
+ sd[8]=7;
+sd[6]=4;
+sc[0]=0;
+sc[6]=0;
+int b=0;
+int c=0;
+for (int a=0;a<14;a++ ){
+	if(sd[a]==0){
+		for(int aa=0;aa<7;aa++){
+			if(c==1){
+				aa=aa+1;
+				continue;
+			}
+			if(sc[aa]!=0&&sd[a+aa+1]==0){
+			sd[a]=sc[aa];
+			sd[a+aa+1]=sc[aa];
+			sc[aa]=0;
+			break;
+			}else{
+				b=b+1;
+				if(b==6){
+					a=a-2;
+					sd[a]=0;
+					 c=1;
+				}
+				
+				
+			}
+		}
+		
+	}
+	a=a+1;
+//	b=b-1;
+	
+}
+
+for(int dd=0;dd<14;dd++){
+	
+	System.out.print(sd[dd]);
+}
+
+
+
+	
+	
+	
+}
+}
